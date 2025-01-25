@@ -1,2 +1,3 @@
-# DbiUebung-006
-Indizes &amp; Laufzeitkomplexität
+###### <p align="center> DbiUebung-006 </p>
+
+- # Indizes & Laufzeitkomplexität
