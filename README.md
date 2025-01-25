@@ -87,8 +87,8 @@
       >   CREATE INDEX inventories_product_idx ON inventories(product_id);
       >   SELECT SUM(quantity) FROM inventories WHERE product_id = 210;
       > ```
-      > ### `INDEX RANGE SCAN` + `TABLE ACCESS BY ROWID`  
-      > ( da quantity nicht im Index enthalten ist )
+      	> - ### `INDEX RANGE SCAN` + `TABLE ACCESS BY ROWID`  
+	> - ( da quantity nicht im Index enthalten ist )
 
     <br>
 
@@ -98,10 +98,9 @@
       >   CREATE INDEX inventories_product_idx ON inventories(product_id);
       >   SELECT SUM(quantity) FROM inventories WHERE product_id = 210;
       > ```
-      > - ***wie b.)***   
-      > ( der zusätzliche Index auf quantity kann nicht benützt werden )  
-      > ### `INDEX RANGE SCAN` + `TABLE ACCESS BY ROWID`  
-      
+        > - ### `INDEX RANGE SCAN` + `TABLE ACCESS BY ROWID`  
+      	> - ***wie b.)***   
+      	> - ( der zusätzliche Index auf quantity kann nicht benützt werden )  
 
     <br>
 
@@ -110,8 +109,8 @@
       >   CREATE INDEX inventories_prod_quant_idx ON inventories(product_id, quantity);
       >   SELECT SUM(quantity) FROM inventories WHERE product_id = 210;
       > ```
-      > ### `INDEX RANGE SCAN`
-      > ( Da sämtliche Daten im Index enthalten sind ***entfällt der Table Access By Rowid*** )
+        > - ### `INDEX RANGE SCAN`
+      	> - ( Da sämtliche Daten im Index enthalten sind ***entfällt der Table Access By Rowid*** )
 
     <br>
 
@@ -120,7 +119,7 @@
       >   CREATE INDEX inventories_quant_prod_idx ON inventories(warehouse_id, product_id);
       >   SELECT COUNT(product_id) FROM inventories WHERE product_id = 210;
       > ```
-      > ### *Entweder* `FAST FULL SCAN` *oder* `SKIP SCAN`.
+        > - ### *Entweder* `FAST FULL SCAN` *oder* `SKIP SCAN`.
 
   <br>
     
