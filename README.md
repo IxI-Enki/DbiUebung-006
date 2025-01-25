@@ -4,8 +4,8 @@
 
 
 - # 1.<sub>)</sub> 
-    ## *<p align="center"> Folgende Abfragen sollen beschleunigt werden. </p>*
-      > *Erstellen Sie - für jede Abfrage einzeln betrachtet - einen oder mehrere Index/izes, so dass jede Abfrage für sich bestmöglich abgearbeitet werden kann.*
+  ## *<p align="center"> Folgende Abfragen sollen beschleunigt werden. </p>*
+    > *Erstellen Sie - für jede Abfrage einzeln betrachtet - einen oder mehrere Index/izes, so dass jede Abfrage für sich bestmöglich abgearbeitet werden kann.*
 
   - ## a <sub>)</sub> 
     > ## `SELECT * FROM emp WHERE ENAME =: some_name;`
@@ -16,7 +16,7 @@
   <br>
 
   - ## b <sub>)</sub> 
-    > ####  `SELECT * FROM emp WHERE job=:sel_job AND sal > :min_sal ORDER BY hiredate DESC;` 
+    > ###  `SELECT * FROM emp WHERE job=:sel_job AND sal > :min_sal ORDER BY hiredate DESC;` 
     ```SQL
         CREATE INDEX idx_emp_job_sal_hiredate ON emp(job, sal, hiredate   DESC);
     ```		
@@ -24,7 +24,7 @@
   <br>
         
   - ## c <sub>)</sub> 
-    > ### `SELECT * FROM emp WHERE (ROUND(sal/1000)*1000) = 2000;`  
+    > ## `SELECT * FROM emp WHERE (ROUND(sal/1000)*1000) = 2000;`  
       - > ( alle Mitarbeiter, deren Verdienst auf ganze Tausender gerundet  2000 beträgt )  
       - > `(ROUND(sal/1000)*1000)` verhindert die direkte Verwendung eines  einfachen Index auf `sal`.  
       - **Function based Index** :
@@ -52,7 +52,7 @@
       - ### i <sub>)</sub>   
         ## *Ohne Primary-Key, ohne Index* :	  
         - ### `FULL TABLE SCAN`
-		      > ***Dies ist die langsamste Methode, insbesondere bei großen Tabellen.*** 
+	    > ***Dies ist die langsamste Methode, insbesondere bei großen Tabellen.*** 
       
       <br>
 
@@ -87,7 +87,8 @@
       >   CREATE INDEX inventories_product_idx ON inventories(product_id);
       >   SELECT SUM(quantity) FROM inventories WHERE product_id = 210;
       > ```
-      > - index range + table access by rowid
+      > ### `INDEX RANGE SCAN` + `TABLE ACCESS BY ROWID`  
+      > ( da quantity nicht im Index enthalten ist )
 
     <br>
 
@@ -97,7 +98,10 @@
       >   CREATE INDEX inventories_product_idx ON inventories(product_id);
       >   SELECT SUM(quantity) FROM inventories WHERE product_id = 210;
       > ```
-      > - index range + table access by rowid
+      > - ***wie b.)***   
+      > ( der zusätzliche Index auf quantity kann nicht benützt werden )  
+      > ### `INDEX RANGE SCAN` + `TABLE ACCESS BY ROWID`  
+      
 
     <br>
 
@@ -107,6 +111,7 @@
       >   SELECT SUM(quantity) FROM inventories WHERE product_id = 210;
       > ```
       > ### `INDEX RANGE SCAN`
+      > ( Da sämtliche Daten im Index enthalten sind ***entfällt der Table Access By Rowid*** )
 
     <br>
 
@@ -115,16 +120,15 @@
       >   CREATE INDEX inventories_quant_prod_idx ON inventories(warehouse_id, product_id);
       >   SELECT COUNT(product_id) FROM inventories WHERE product_id = 210;
       > ```
-      >  ### *Entweder* `FAST FULL SCAN` *oder* `SKIP SCAN`.
+      > ### *Entweder* `FAST FULL SCAN` *oder* `SKIP SCAN`.
 
   <br>
     
 ---
-
 <br>
 
 - # 3.<sub>)</sub> 
-    ## <p align="center"> *Welcher Komplexitätsklasse gehörden folgende Operationen an:* </p>
+    ## *<p align="center"> Welcher Komplexitätsklasse gehörden folgende Operationen an: </p>*
 
   - ## a <sub>)</sub> 
       ### `SELECT * FROM emp WHERE sal > 1000;` 
